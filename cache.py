@@ -33,7 +33,7 @@ FINGERPRINT_FILE  = Path("logs/doc_fingerprints.json")
 SIMILARITY_THRESHOLD = 0.75
 
 
-# ── Fingerprinting ─────────────────────────────────────────────────────
+# Fingerprinting
 
 def compute_doc_fingerprints(docs_dir: str = "docs") -> dict[str, int]:
     """Return {filename: line_count} for all docs."""
@@ -102,7 +102,6 @@ def check_and_invalidate_cache(docs_dir: str = "docs") -> bool:
         if name not in current:
             wipe_cache()
             save_fingerprints(current)
-            print(f"'{name}' removed — cache cleared.")
             return True
         if current[name] != lines:
             wipe_cache()
@@ -118,7 +117,7 @@ def check_and_invalidate_cache(docs_dir: str = "docs") -> bool:
     return False
 
 
-# ── Cache read / write ─────────────────────────────────────────────────
+# Cache read / write
 
 def load_cache() -> list[dict]:
     """Load all cached entries including stored embeddings."""
@@ -159,7 +158,7 @@ def save_to_cache(query: str, answer: str, confidence: float, level: int):
         pass
 
 
-# ── Semantic lookup ────────────────────────────────────────────────────
+# Semantic lookup
 
 def find_cached_answer(query: str) -> Optional[dict]:
     """
