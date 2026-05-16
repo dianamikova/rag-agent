@@ -2,8 +2,8 @@
 
 **Course:** Information Retrieval | **GitHub:** [dianamikova/rag-agent]
  
-Github link: https://github.com/dianamikova/rag-agent
-Video link: https://drive.google.com/file/d/1PUSQvuvORo2YxYNBjWq_Dy5v27DWyZz2/view?usp=sharing
+**GitHub:** [dianamikova/rag-agent](https://github.com/dianamikova/rag-agent)  
+**Video:** [Demo recording](https://drive.google.com/file/d/1PUSQvuvORo2YxYNBjWq_Dy5v27DWyZz2/view?usp=sharing)
 ---
 
 ## 1. Motivation
