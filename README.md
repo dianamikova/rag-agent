@@ -77,6 +77,7 @@ streamlit run app.py
 ```
 
 **Demo video:**
+Demonstrates all 4 Levels of retrieval, including cache, by asking similar question.
 
 https://drive.google.com/file/d/1PUSQvuvORo2YxYNBjWq_Dy5v27DWyZz2/view?usp=sharing
 
