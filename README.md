@@ -151,4 +151,4 @@ Every query is logged to `logs/queries.jsonl` with full escalation trace, confid
 - Jiang et al. (2023). *FLARE*. EMNLP 2023. [arXiv:2305.06983](https://arxiv.org/abs/2305.06983)
 - Gao et al. (2023). *HyDE*. ACL 2023. [arXiv:2212.10496](https://arxiv.org/abs/2212.10496)
 - Es et al. (2024). *RAGAs*. EACL 2024.
-- Anonymous (2025). *FAIR-RAG*. [arXiv:2510.22344](https://arxiv.org/abs/2510.22344)
+- Asl et al. (2025). *FAIR-RAG*. [arXiv:2510.22344](https://arxiv.org/abs/2510.22344)
