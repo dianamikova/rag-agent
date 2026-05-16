@@ -76,10 +76,8 @@ python main.py "What is retrieval augmented generation?"
 streamlit run app.py
 ```
 
-**Demo video:**
-Demonstrates all 4 Levels of retrieval, including cache, by asking similar question.
-
-https://drive.google.com/file/d/1PUSQvuvORo2YxYNBjWq_Dy5v27DWyZz2/view?usp=sharing
+**Demo video:** [Watch recording](https://drive.google.com/file/d/1PUSQvuvORo2YxYNBjWq_Dy5v27DWyZz2/view?usp=sharing) 
+Demonstrates all 4 Levels of retrieval, including cache.
 
 ---
 
@@ -134,7 +132,7 @@ At Berget.AI with Llama 3.3 70B (€0.90/M tokens), a typical query costs **€0
 
 ## Supported document formats
 
-- `.txt` — plain text (summaries recommended)
+- `.txt` — plain text
 - `.md` — Markdown
 - `.pdf` — PDF (requires `pymupdf`, included in requirements)
 
