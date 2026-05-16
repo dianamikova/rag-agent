@@ -1,5 +1,5 @@
 """
-cache.py — Semantic query cache with pre-computed embeddings.
+cache.py: Semantic query cache with pre-computed embeddings.
 
 Performance fix:
 - Old approach: re-embed ALL cached queries on every lookup --> slow
@@ -160,30 +160,22 @@ def find_cached_answer(query: str, query_variants: list[str] = None) -> Optional
     Fast semantic cache lookup.
 
     Steps:
-    1. Embed the incoming query + any variants ONCE (local, free)
-    2. Compare each against pre-stored embeddings
+    1. Embed original query, find best match
+    2. Only use variants if they score at least 0.10 better than original
+       — prevents memory enrichment from accidentally matching unrelated queries
     3. Return best match above SIMILARITY_THRESHOLD
-
-    Cost: 1 embedding per variant regardless of cache size.
     """
     entries = load_cache()
     if not entries:
         return None
 
-    # Build list of queries to try
-    queries_to_try = [query]
-    if query_variants:
-        queries_to_try += [v for v in query_variants if v != query]
-
-    best_score = 0.0
-    best_entry = None
-
-    for q in queries_to_try:
+    def best_match_for(q: str):
         q_emb = _embed([q])
         if q_emb is None:
-            continue
+            return 0.0, None
         q_vec = q_emb[0]
-
+        best_score = 0.0
+        best_entry = None
         for entry in entries:
             stored_emb = entry.get("embedding")
             if stored_emb is None:
@@ -192,8 +184,24 @@ def find_cached_answer(query: str, query_variants: list[str] = None) -> Optional
             if score > best_score:
                 best_score = score
                 best_entry = entry
+        return best_score, best_entry
 
-    if best_score >= SIMILARITY_THRESHOLD:
+    # Try original query first
+    orig_score, orig_entry = best_match_for(query)
+    best_score = orig_score
+    best_entry = orig_entry
+
+    # Only accept variant if it scores meaningfully better
+    if query_variants:
+        for variant in query_variants:
+            if variant == query:
+                continue
+            v_score, v_entry = best_match_for(variant)
+            if v_score > best_score and v_score - orig_score >= 0.10:
+                best_score = v_score
+                best_entry = v_entry
+
+    if best_score >= SIMILARITY_THRESHOLD and best_entry:
         result = {k: v for k, v in best_entry.items() if k != "embedding"}
         result["cache_similarity"] = round(best_score, 4)
         return result

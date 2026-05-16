@@ -1,5 +1,5 @@
 """
-agent.py — 3-level escalating RAG agent
+agent.py: 3-level escalating RAG agent
 
 Level 0: Semantic cache   — 0 API calls (truly free)
 Level 1: Query expansion  — 1 API call (answer generation only)
@@ -240,16 +240,14 @@ class RAGAgent:
         log = QueryLog(original_query=query)
 
         # ── Cache check ─────────────────────────────────────────────
-        # Build query variants — original always tried, enriched variants as fallback
-        PRONOUNS = {"it", "its", "this", "that", "they", "them", "their", "these", "those"}
-        query_tokens = set(query.lower().split())
-
+        # Try original query first, then memory+context enriched variant
         variants = []
         enriched = enrich_query_with_memory(query)
+        if self.last_query:
+            enriched = f"{enriched} {self.last_query[:50]}"
+        enriched = enriched[:300]
         if enriched != query:
             variants.append(enriched)
-        if self.last_query and query_tokens & PRONOUNS:
-            variants.append(f"{query} {self.last_query}")
 
         cached = find_cached_answer(query, query_variants=variants)
         if cached:

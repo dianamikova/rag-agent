@@ -1,5 +1,5 @@
 """
-memory.py — Persistent memory across sessions.
+memory.py: Persistent memory across sessions.
 
 How it works:
 - After each successful answer, extract key facts using the LLM
@@ -123,6 +123,44 @@ def enrich_query_with_memory(query: str) -> str:
     keyword_str = " ".join(dict.fromkeys(keywords[:8]))  # max 8 keywords total
     enriched = f"{query} {keyword_str}"
     return enriched[:200]  # hard cap to keep embedding fast
+
+
+def resolve_pronouns(query: str, last_query: str) -> str:
+    """
+    Replace pronouns in query with the main subject from the last query.
+    Zero cost — pure string manipulation, no API calls.
+
+    Example:
+        query:      "How does it work?"
+        last_query: "What is BM25?"
+        result:     "How does BM25 work?"
+    """
+    import re
+    PRONOUNS = {"it", "its", "this", "that", "they", "them", "their", "these", "those"}
+    words = query.split()
+    query_lower = [w.lower().strip("?.,!") for w in words]
+
+    if not any(w in PRONOUNS for w in query_lower):
+        return query  # no pronouns — nothing to do
+
+    # Extract subject from last query — prefer uppercase/acronyms
+    keywords = re.findall(r'\b[a-zA-Z0-9]{2,}\b', last_query)
+    if not keywords:
+        return query
+
+    subject = next((w for w in keywords if w[0].isupper() or w.isupper()), keywords[-1])
+
+    # Replace only the pronouns, preserve surrounding punctuation
+    result = []
+    for token in words:
+        clean = token.lower().strip("?.,!")
+        if clean in PRONOUNS:
+            punctuation = token[len(token.rstrip("?.,!")):]
+            result.append(subject + punctuation)
+        else:
+            result.append(token)
+
+    return " ".join(result)
 
 
 # Memory context
