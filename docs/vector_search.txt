@@ -1,0 +1,13 @@
+Vector Search — Summary
+
+Vector search is a retrieval technique that represents documents and queries as dense numerical vectors in a high-dimensional space, enabling similarity matching based on semantic meaning rather than exact keyword overlap. Unlike traditional keyword-based search, vector search can find relevant documents even when they use different words than the query, as long as the meaning is similar.
+
+The core idea is to use a neural encoder — typically a transformer-based language model — to convert text into embeddings: fixed-length vectors that capture semantic meaning. Documents are encoded and stored in a vector index at indexing time. At query time, the query is encoded into a vector, and the system finds the documents whose vectors are most similar using a distance metric such as cosine similarity or dot product.
+
+Vector databases such as Pinecone, Weaviate, Chroma, and FAISS are purpose-built to store and search large collections of embeddings efficiently. They use approximate nearest neighbor (ANN) algorithms such as HNSW (Hierarchical Navigable Small World) to perform fast similarity search at scale, trading a small amount of accuracy for significant speed improvements.
+
+Vector search is the foundation of semantic search and retrieval-augmented generation (RAG) systems. In RAG pipelines, document chunks are embedded and stored in a vector index. When a user submits a query, it is embedded and the most similar chunks are retrieved and passed to a language model as context for answer generation.
+
+A key limitation of vector search is that it can miss relevant documents that use exact terminology the model was not trained to associate semantically. This is why hybrid retrieval — combining vector search with keyword-based BM25 — is increasingly common in production systems. BM25 handles exact term matching while vector search handles semantic matching, making them complementary rather than competing approaches.
+
+Hypothetical Document Embeddings (HyDE) is an advanced technique that improves vector search by generating a hypothetical answer document using a language model, then using that document's embedding as the search query. This bridges the semantic gap between question-shaped queries and answer-shaped documents in the vector space.

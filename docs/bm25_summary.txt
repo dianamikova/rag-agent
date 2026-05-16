@@ -1,0 +1,11 @@
+BM25 (Best Match 25) — Summary
+
+Okapi BM25 is a probabilistic ranking function used by search engines to estimate the relevance of documents to a given search query. BM stands for Best Matching, and 25 denotes the specific iteration in a sequence of weighting schemes developed by Stephen E. Robertson and Karen Sparck Jones in the 1970s and 1980s. It was first implemented in the Okapi information retrieval system at City University London.
+
+BM25 is a bag-of-words retrieval function that ranks documents based on the query terms appearing in each document, regardless of their proximity within the document. It builds upon the classical TF-IDF approach but adds two important improvements: term frequency saturation and document length normalization. The formula uses two tunable parameters, k1 and b, to control how much term frequency and document length affect the final relevance score.
+
+Term frequency saturation means that the relevance score increases with each additional occurrence of a query term in a document, but with diminishing returns — a term appearing 10 times is not 10 times more relevant than one appearing once. Document length normalization penalizes longer documents to avoid giving them an unfair advantage simply because they contain more words overall.
+
+BM25 remains the default ranking algorithm in most major search engines and enterprise retrieval systems. Apache Lucene, which underlies Elasticsearch and Solr, switched BM25 to its default similarity function in 2016. Despite being over 30 years old, BM25 is valued for being theoretically grounded, efficient to compute, interpretable, and effective in practice. Its greatest practical advantage is debuggability: every score can be traced to specific term statistics.
+
+In modern retrieval pipelines, BM25 is often combined with dense vector search in what is called hybrid retrieval. BM25 handles exact keyword matching while dense models handle semantic similarity, making the two approaches complementary. BM25 tends to fail when the query uses synonyms or related concepts not present in the document, which is precisely the failure mode that semantic search and HyDE address.

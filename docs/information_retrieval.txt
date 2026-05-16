@@ -1,0 +1,11 @@
+Information Retrieval — Summary
+
+Information retrieval (IR) is an essential branch of computer science that aims to efficiently retrieve information relevant to user queries from large repositories. Users interact with IR systems by submitting queries in textual form, and the system matches and ranks these queries against an indexed database to return the most pertinent results.
+
+The field has evolved significantly over decades. Early models include the Boolean model, which uses Boolean logic operators to combine query terms and retrieve documents satisfying specific conditions. The vector space model represents documents and queries as vectors in a multi-dimensional term-based space, using cosine similarity to rank results. Probabilistic models such as BM25 calculate the probability that a document is relevant to a query based on term frequency and document length.
+
+Modern IR models are categorized into sparse, dense, and hybrid approaches. Sparse models use interpretable term-based representations and rely on inverted index structures — classical methods such as TF-IDF and BM25 fall under this category. Dense models represent queries and documents as continuous vectors using deep learning models, typically transformer-based encoders, enabling semantic similarity matching beyond exact term overlap. Hybrid models combine both sparse and dense retrieval to leverage the strengths of each approach.
+
+Retrieval-Augmented Generation (RAG) represents a major development in IR, combining retrieval systems with large language models to ground generated answers in retrieved evidence. This reduces hallucination and allows models to access information beyond their training data. Advanced RAG systems such as Self-RAG, FLARE, and FAIR-RAG introduce iterative and self-reflective retrieval mechanisms to improve context quality before generation.
+
+Evaluation of IR systems typically uses metrics such as precision, recall, F1 score, Mean Average Precision (MAP), and Normalized Discounted Cumulative Gain (NDCG). The RAGAs framework provides automated evaluation specifically for RAG pipelines, measuring faithfulness, answer relevancy, context precision, and context recall without requiring human annotations.

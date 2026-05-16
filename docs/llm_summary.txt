@@ -1,0 +1,11 @@
+Large Language Models — Summary
+
+Large language models (LLMs) are deep learning models trained on massive text corpora to understand and generate human language. They are built on the transformer architecture, introduced by Vaswani et al. in 2017 in the paper "Attention is All You Need." The transformer uses a self-attention mechanism that allows the model to weigh the importance of different words in a sequence relative to each other, enabling it to capture long-range dependencies in text.
+
+LLMs are trained using self-supervised learning on large text datasets — typically hundreds of billions of tokens from web pages, books, code, and other sources. The primary training objective is next-token prediction: given a sequence of tokens, predict the next one. Through this process, the model implicitly learns grammar, facts, reasoning patterns, and world knowledge. After pretraining, models are typically fine-tuned using reinforcement learning from human feedback (RLHF) to make them more helpful, harmless, and honest.
+
+Notable LLMs include GPT-3 and GPT-4 from OpenAI, Claude from Anthropic, Gemini from Google, and the open-source Llama family from Meta. These models have demonstrated strong performance across a wide range of tasks including question answering, summarization, translation, code generation, and reasoning.
+
+A key limitation of LLMs is that their knowledge is static — fixed at training time. They cannot access information about events after their training cutoff, and they are prone to hallucination: generating plausible-sounding but factually incorrect information. Retrieval-Augmented Generation (RAG) addresses this by combining LLMs with information retrieval systems, allowing the model to ground its responses in retrieved evidence rather than relying solely on parametric memory.
+
+Context window size is a fundamental constraint of LLMs. Early models had context windows of 2048 tokens. Modern models support 128K tokens or more, but processing very long contexts remains computationally expensive. This constraint motivates techniques such as chunking, retrieval, and context compaction in RAG systems.

@@ -1,0 +1,29 @@
+# API keys and secrets — never push these
+.env
+
+# Query logs, cache, memory — personal data
+logs/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Mac system files
+.DS_Store
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE files
+.vscode/
+.idea/
+
+# sentence-transformers model cache (large, auto-downloaded)
+.cache/
