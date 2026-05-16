@@ -61,7 +61,6 @@ def compute_doc_fingerprints(docs_dir: str = "docs") -> dict[str, int]:
             fingerprints[f.name] = 0
     return fingerprints
 
-
 def load_fingerprints() -> dict[str, int]:
     if not FINGERPRINT_FILE.exists():
         return {}
@@ -70,7 +69,6 @@ def load_fingerprints() -> dict[str, int]:
     except Exception:
         return {}
 
-
 def save_fingerprints(fingerprints: dict[str, int]):
     try:
         Path("logs").mkdir(exist_ok=True)
@@ -78,11 +76,9 @@ def save_fingerprints(fingerprints: dict[str, int]):
     except Exception:
         pass
 
-
 def wipe_cache():
     if CACHE_FILE.exists():
         CACHE_FILE.unlink()
-
 
 def check_and_invalidate_cache(docs_dir: str = "docs") -> bool:
     """
@@ -131,7 +127,6 @@ def load_cache() -> list[dict]:
             except Exception:
                 pass
     return entries
-
 
 def save_to_cache(query: str, answer: str, confidence: float, level: int):
     """
