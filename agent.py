@@ -240,17 +240,18 @@ class RAGAgent:
         log = QueryLog(original_query=query)
 
         # ── Cache check ─────────────────────────────────────────────
-        # Try original query first — exact/near matches always work best
-        # Fall back to enriched query for paraphrase matching
-        cached = find_cached_answer(query)
-        if not cached:
-            # Try enriched query with memory + last query context
-            enriched_query = enrich_query_with_memory(query)
-            if self.last_query:
-                enriched_query = f"{enriched_query} {self.last_query[:50]}"
-            enriched_query = enriched_query[:300]
-            if enriched_query != query:
-                cached = find_cached_answer(enriched_query)
+        # Build query variants — original always tried, enriched variants as fallback
+        PRONOUNS = {"it", "its", "this", "that", "they", "them", "their", "these", "those"}
+        query_tokens = set(query.lower().split())
+
+        variants = []
+        enriched = enrich_query_with_memory(query)
+        if enriched != query:
+            variants.append(enriched)
+        if self.last_query and query_tokens & PRONOUNS:
+            variants.append(f"{query} {self.last_query}")
+
+        cached = find_cached_answer(query, query_variants=variants)
         if cached:
             log.final_answer = f"[Cached] {cached['answer']}"
             log.resolved_at_level = cached.get("resolved_at_level", 0)

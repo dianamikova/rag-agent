@@ -2,22 +2,22 @@
 cache.py — Semantic query cache with pre-computed embeddings.
 
 Performance fix:
-- Old approach: re-embed ALL cached queries on every lookup → slow
+- Old approach: re-embed ALL cached queries on every lookup --> slow
 - New approach: embed query once when saving, store embedding in cache
                 On lookup: embed only the new query (1 embedding) and
-                compare against stored embeddings → fast
+                compare against stored embeddings --> fast
 
 Cache invalidation logic:
 - Each document is fingerprinted by name + line count
-- New documents added → cache KEPT (old answers still valid)
-- Existing document removed → cache CLEARED
-- Existing document content changed → cache CLEARED
-- Nothing changed → cache KEPT
+- New documents added --> cache KEPT (old answers still valid)
+- Existing document removed --> cache CLEARED
+- Existing document content changed --> cache CLEARED
+- Nothing changed --> cache KEPT
 
 Semantic matching:
 - Incoming query embedded once locally (free)
 - Compared against stored embeddings via cosine similarity
-- If similarity > SIMILARITY_THRESHOLD → return cached answer instantly
+- If similarity > SIMILARITY_THRESHOLD --> return cached answer instantly
 """
 
 import json
@@ -155,39 +155,43 @@ def save_to_cache(query: str, answer: str, confidence: float, level: int):
 
 # Semantic lookup
 
-def find_cached_answer(query: str) -> Optional[dict]:
+def find_cached_answer(query: str, query_variants: list[str] = None) -> Optional[dict]:
     """
     Fast semantic cache lookup.
 
     Steps:
-    1. Embed the incoming query ONCE (local, free)
-    2. Compare against pre-stored embeddings (dot product only, no re-embedding)
+    1. Embed the incoming query + any variants ONCE (local, free)
+    2. Compare each against pre-stored embeddings
     3. Return best match above SIMILARITY_THRESHOLD
 
-    Cost: 1 embedding regardless of cache size.
+    Cost: 1 embedding per variant regardless of cache size.
     """
     entries = load_cache()
     if not entries:
         return None
 
-    # Embed only the new query — O(1) regardless of cache size
-    q_emb = _embed([query])
-    if q_emb is None:
-        return None
-    q_vec = q_emb[0]
+    # Build list of queries to try
+    queries_to_try = [query]
+    if query_variants:
+        queries_to_try += [v for v in query_variants if v != query]
 
     best_score = 0.0
     best_entry = None
 
-    for entry in entries:
-        stored_emb = entry.get("embedding")
-        if stored_emb is None:
-            # Legacy entry without embedding — skip
+    for q in queries_to_try:
+        q_emb = _embed([q])
+        if q_emb is None:
             continue
-        score = _cosine(q_vec, stored_emb)
-        if score > best_score:
-            best_score = score
-            best_entry = entry
+        q_vec = q_emb[0]
+
+        for entry in entries:
+            stored_emb = entry.get("embedding")
+            if stored_emb is None:
+                continue
+            score = _cosine(q_vec, stored_emb)
+            if score > best_score:
+                best_score = score
+                best_entry = entry
 
     if best_score >= SIMILARITY_THRESHOLD:
         result = {k: v for k, v in best_entry.items() if k != "embedding"}
