@@ -1,5 +1,3 @@
-## 🚀 Next step - improve document search (hybrid search instead of dense search)
-
 # RAG Agent with Escalating Retrieval
 
 A token-efficient RAG agent that escalates through retrieval strategies in order of cost, stopping as soon as confidence is sufficient. Built for Information Retrieval research and practical question answering over local documents.
