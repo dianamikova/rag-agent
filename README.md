@@ -45,7 +45,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Open `.env` and add your API key:
+❗Open `.env` and add your API key:
 
 ```bash
 LLM_API_KEY=your-key-here
