@@ -1,7 +1,7 @@
-# API keys and secrets — never push these
+# API keys and secrets
 .env
 
-# Query logs, cache, memory — personal data
+# Query logs, cache, memory
 logs/
 
 # Python bytecode
